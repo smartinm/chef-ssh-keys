@@ -1,13 +1,13 @@
 Description
 ===========
 
-Creates `authorized_keys` in user `~/.ssh` directory from a data bag (encrypted data bag supported).
+Creates `authorized_keys` in user `~/.ssh` directory from a data bag (encrypted data bag supported) or node attributes.
 
 Attributes
 ==========
 
 Expects `node[:ssh_keys]` to be an hash containing the user name as key and data bag user name as value.
-Also, users can be defined by groups (see usage examples below).
+Also, users can be defined by groups or node attributes (see usage examples below).
 
 See `attributes/default.rb` for additional attributes default values.
 
@@ -58,6 +58,17 @@ Node configuration example to create `authorized_keys` for user `root` from data
       ]
     }
 
+Node configuration example to create `authorized_keys` for user `root` from `ssh_keys` attribute:
+
+    {
+      "ssh_keys": {
+        "root": {"ssh_keys": ["ssh-rsa AAAAB3Nz...oBUw== user"]}
+      },
+      "run_list": [
+        "recipe[ssh-keys]"
+      ]
+    }
+
 Use knife to create a data bag for users:
 
     knife data bag create users
@@ -75,6 +86,8 @@ User data bag example (compatible with Chef [users cookbook](https://github.com/
       "id": "user2",
       "ssh_keys": "ssh-rsa AAAAB3Nz...5D8F== user2"
     }
+
+Data bag is not required if you only want to use the `ssh_keys` attribute in node configuration.
 
 Cookbook URLs
 =============
